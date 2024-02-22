@@ -1,0 +1,20 @@
+#!/bin/sh
+. git-sh-setup
+
+# only apply for commit by 'pwclient git-am' that generates 'Message-Id:'
+grep "^Message-Id:" "$1" > /dev/null
+if [ "$?" == "0" ]; then
+	tn=$(git config --get user.name) || exit 0
+	te=$(git config --get user.email) || exit 0
+	sob="Signed-off-by: $tn <$te>"
+
+	# prevent duplicate s-o-b
+	sed -i -e "/$sob/d" "$1"
+	sed -i -e "s/^\(Message-Id:\)/$sob\n\1/g;" "$1"
+
+	perl -pi -e 's|^Message-Id:\s*<?([^>]+)>?$|Link: https://msgid.link/$1|g;' "$1"
+fi
+
+test -x "$GIT_DIR/hooks/commit-msg" &&
+        exec "$GIT_DIR/hooks/commit-msg" ${1+"$@"}
+:
