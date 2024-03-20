@@ -57,7 +57,14 @@ function get_fields()
 	local full_l="$1"
 	local field_l="$2"
 
-	echo "$full_l" | sed -n "/^$field_l: /I,/^ /p" | sed "N; s/\n / /" | head -n 1 - | sed "s/^$field_l: //I"
+	# Cc: Jes Sorensen <Jes.Sorensen@gmail.com>,
+	# 	Kalle Valo <kvalo@kernel.org>,
+	# 	Ping-Ke Shih <pkshih@realtek.com>,
+	# 	Bitterblue Smith <rtl8821cerfe2@gmail.com>,
+	# 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+
+	echo "$full_l" | sed -n "s/^$field_l: //p; t again; b end; :again; n; s/^[ \t]\+//p; t again; :end" |
+		sed ":again; N; s/\n/ /; t again"
 }
 
 echo "Getting $id from patchwork..."
@@ -68,6 +75,8 @@ full=`pwclient view $id`
 
 field_list="From To Cc Subject Message-Id In-Reply-To References"
 declare -A original
+
+[ "$debug" == "2" ] && echo -e "full: [[[[\n$full\n]]]]"
 
 for f in $field_list; do
 	original[$f]=`get_fields "$full" "$f"`
@@ -97,13 +106,17 @@ function get_plain_email_addr()
 {
 	local complex="$1"
 
-	echo $complex | sed "s/^[^<]*<//" | sed "s/>[^>]*$//" | sed "s/>[^<]*</ /g"
+	# Martin Kaistra <martin.kaistra@linutronix.de>, linux-wireless@vger.kernel.org
+	# --> martin.kaistra@linutronix.de linux-wireless@vger.kernel.org
+	echo $complex | sed "s/^[^<]*<//" | sed "s/,[^<]*</,/g" | sed "s/>[ ]*$//g" | sed "s/>[ ]*,/ /g"
 }
 
 t=`get_plain_email_addr "${reply["To"]}"`
 receivers="$receivers $t"
+[ "$debug" == "1" ] && echo "receivers=$receivers +To:${reply["To"]}"
 t=`get_plain_email_addr "${reply["Cc"]}"`
 receivers="$receivers $t"
+[ "$debug" == "1" ] && echo "receivers=$receivers +Cc:${reply["Cc"]}"
 
 #################################################################
 # make body, and add wrote at beginning of body
