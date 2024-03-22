@@ -63,7 +63,7 @@ function get_fields()
 	# 	Bitterblue Smith <rtl8821cerfe2@gmail.com>,
 	# 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-	echo "$full_l" | sed -n "s/^$field_l: //p; t again; b end; :again; n; s/^[ \t]\+//p; t again; :end" |
+	echo "$full_l" | sed -n "s/^$field_l: //pI; t again; b end; :again; n; s/^[ \t]\+//p; t again; :end" |
 		sed ":again; N; s/\n/ /; t again"
 }
 
