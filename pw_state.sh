@@ -79,16 +79,21 @@ done
 read -p "Apply state ($state) to $n patch(es)? (y) " y
 [ "$y" != "y" ] && exit 1
 
-echo "Apply state ($state) to $ids ..."
+echo "Applying state ($state) to $ids ..."
 
 pwclient update -p linux-wireless-rest -s "$state" $ids
 
 echo -e "\e[0;44m-------------<< for notification email >>------------------\e[0m"
 
-read -p "Send notification to $id? (y) " y
+read -p "Send notification to $firstid? (y) " y
 [ "$y" != "y" ] && exit 1
 
-notify_msg="set patchset state to $state"
+notify_msg="Set patchset state to $state
+"
+
+for i in `seq 0 $((n-1))`; do
+	notify_msg="$notify_msg\n${patch["$i,name"]}"
+done
 
 $PWDIR/pw_reply.sh $firstid "$notify_msg"
 
