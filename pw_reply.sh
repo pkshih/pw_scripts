@@ -54,7 +54,7 @@ debug=
 
 function get_fields()
 {
-	local full_l="$1"
+	local mhdr_l="$1"
 	local field_l="$2"
 
 	# Cc: Jes Sorensen <Jes.Sorensen@gmail.com>,
@@ -63,12 +63,13 @@ function get_fields()
 	# 	Bitterblue Smith <rtl8821cerfe2@gmail.com>,
 	# 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-	echo "$full_l" | sed -n "s/^$field_l: //pI; t again; b end; :again; n; s/^[ \t]\+//p; t again; :end" |
+	echo "$mhdr_l" | sed -n "s/^$field_l: //pI; t again; b end; :again; n; s/^[ \t]\+//p; t again; :end" |
 		sed ":again; N; s/\n/ /; t again"
 }
 
 echo "Getting $id from patchwork..."
 full=`pwclient view $id`
+mhdr=`echo "$full" | sed -n ":again; s/^$//; t end; p; n; b again; :end; n; b end"`
 
 #################################################################
 # parse fields
@@ -79,7 +80,7 @@ declare -A original
 [ "$debug" == "2" ] && echo -e "full: [[[[\n$full\n]]]]"
 
 for f in $field_list; do
-	original[$f]=`get_fields "$full" "$f"`
+	original[$f]=`get_fields "$mhdr" "$f"`
 
 	[ "$debug" == "1" ] && echo "$f: ${original[$f]}"
 done
