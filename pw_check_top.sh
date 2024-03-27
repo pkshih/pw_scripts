@@ -13,11 +13,15 @@
 subject_sha1=`git log --oneline -1 --decorate=no`
 subject=`echo $subject_sha1 | cut -f 2- -d ' '`
 
-match=`echo $subject | grep "^\(wifi: \(rtw89\|rtw88\|rtlwifi\|rtl8xxxu\)\): "`
+match=`echo $subject | sed -n "s/\(wifi: \(rtw89\|rtw88\|rtlwifi\|rtl8xxxu\)\): .*/\2/p"`
+dirmatch=`git diff HEAD^ --name-only | grep drivers/net/wireless/realtek/$match`
+extra_msg=""
+[ "$dirmatch" == "" ] && extra_msg="(because of mismatch of directory)"
 
-if [ "$match" == "" ]; then
-	echo "invalid subject: $subject"
-	exit 1
+if [ "$match" == "" ] || [ "$dirmatch" == "" ]; then
+	echo -e "\e[0;33minvalid subject: $subject $extra_msg\e[0m"
+	echo -n "Continue? (y) "
+	read y && [ "$y" != "y" ] && exit 1
 fi
 
 # ----------------------------------------------------------------------

@@ -37,6 +37,7 @@ for id in $ids; do
 	fi
 
 	$PWDIR/pw_check_top.sh
+	[ "$?" != "0" ] && exit 1
 
 	echo -e "\e[0;44m-------------------------------------------------- end $((n+1))/$guess_n: $id\e[0m"
 
