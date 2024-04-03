@@ -18,8 +18,8 @@ It uses pwclient basically to manage patches, and shell scripts as helpers to ac
 # Workflow - send pull request
 * pw_add_tag.sh
   * send pull request
-* copy-paste and send email
-
+* pw_sendpr.sh
+  * send email with generated tag by pw_add_tag.sh
 
 # Other helpers:
 * pw_check_patchset.sh
