@@ -66,7 +66,7 @@ ret=$?
 
 popd
 
-if [ $ret != 0 ]; then
+if [ "$PWDRY" == "" ] && [ $ret != 0 ]; then
 	echo -n "Continue? (y) "
 	read y && [ $y != "y" ] && exit 1
 fi
@@ -93,7 +93,7 @@ popd
 
 # ----------------------------------------------------------------------
 
-if [ $ret != 0 ]; then
+if [ "$PWDRY" == "" ] && [ $ret != 0 ]; then
 	echo -n "Continue? (y) "
 	read y && [ $y != "y" ] && exit 1
 fi

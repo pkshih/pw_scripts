@@ -6,6 +6,8 @@
 
 # Interactive mode to modify commit message and etc
 #    PWINT=1 pw_apply.sh
+# Dry-run mode to apply all patches
+#    PWDRY=1 pw_apply.sh
 
 PWDIR=`dirname $0`
 . $PWDIR/pw_env.sh
@@ -48,6 +50,7 @@ echo -e "\e[0;44m-------------<< run checkers for all patchset >>---------------
 $PWDIR/pw_check_patchset.sh $n
 [ "$?" != "0" ] && exit 1
 
+[ "$PWDRY" == "1" ] && exit 0
 echo -e "\e[0;44m-------------<< for notification email >>------------------\e[0m"
 notify_msg="$n patch(es) applied to rtw-next branch of rtw.git, thanks."
 t=`git log --oneline -n $n --decorate=no --reverse`

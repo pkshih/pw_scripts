@@ -20,15 +20,17 @@ extra_msg=""
 
 if [ "$match" == "" ] || [ "$dirmatch" == "" ]; then
 	echo -e "\e[0;33minvalid subject: $subject $extra_msg\e[0m"
-	echo -n "Continue? (y) "
-	read y && [ "$y" != "y" ] && exit 1
+	if [ "$PWDRY" == "" ]; then
+		echo -n "Continue? (y) "
+		read y && [ "$y" != "y" ] && exit 1
+	fi
 fi
 
 # ----------------------------------------------------------------------
 # checkpatch
 ./scripts/checkpatch.pl <(git show --pretty=email)
 
-if [ $? != 0 ]; then
+if [ "$PWDRY" == "" ] && [ $? != 0 ]; then
 	echo -n "Continue? (y) "
 	read y && [ "$y" != "y" ] && exit 1
 fi
@@ -44,7 +46,7 @@ ret=$?
 
 popd
 
-if [ $ret != 0 ]; then
+if [ "$PWDRY" == "" ] && [ $ret != 0 ]; then
 	echo -n "Continue? (y) "
 	read y && [ "$y" != "y" ] && exit 1
 fi
