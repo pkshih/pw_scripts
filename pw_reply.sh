@@ -122,7 +122,7 @@ receivers="$receivers $t"
 #################################################################
 # make body, and add wrote at beginning of body
 
-body=`echo "$full" | sed -n "/^$/,/---/p" | sed -n "/---/q;p" | tail -n +2 - | sed "s/^/> /"`
+body=`echo "$full" | sed -n "/^$/,/^---$/p" | sed -n "/^---$/q;p" | tail -n +2 - | sed "s/^/> /"`
 body="${original["From"]} wrote:
 
 $body"
