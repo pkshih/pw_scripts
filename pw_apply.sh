@@ -60,3 +60,6 @@ $t"
 
 $PWDIR/pw_reply.sh $firstid "$notify_msg"
 
+echo -e "\e[0;44m-------------<< remaining things >>------------------\e[0m"
+echo "1. check commits and push out"
+echo "2. set commits' states in patchwork"
