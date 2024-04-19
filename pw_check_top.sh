@@ -29,8 +29,9 @@ fi
 # ----------------------------------------------------------------------
 # checkpatch
 ./scripts/checkpatch.pl <(git show --pretty=email)
+ret=$?
 
-if [ "$PWDRY" == "" ] && [ $? != 0 ]; then
+if [ "$PWDRY" == "" ] && [ $ret != 0 ]; then
 	echo -n "Continue? (y) "
 	read y && [ "$y" != "y" ] && exit 1
 fi
