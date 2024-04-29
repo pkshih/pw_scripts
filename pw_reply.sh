@@ -109,7 +109,9 @@ function get_plain_email_addr()
 
 	# Martin Kaistra <martin.kaistra@linutronix.de>, linux-wireless@vger.kernel.org
 	# --> martin.kaistra@linutronix.de linux-wireless@vger.kernel.org
-	echo $complex | sed "s/^[^<]*<//" | sed "s/,[^<]*</,/g" | sed "s/>[ ]*$//g" | sed "s/>[ ]*,/ /g"
+	# linux-wireless@vger.kernel.org, <abc>abc@abc.com, <bcd>bcd@bcd.com
+	# --> linux-wireless@vger.kernel.org abc@abc.com bcd@bcd.com
+	echo $complex | sed "s/^[^<,]*<//" | sed "s/,[^<,]*</,/g" | sed "s/>[ ]*$//g" | sed "s/>[ ]*,/ /g" | sed "s/[ ]*,[ ]*/ /g"
 }
 
 t=`get_plain_email_addr "${reply["To"]}"`
