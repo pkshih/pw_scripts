@@ -3,9 +3,10 @@
 PWDIR=`dirname $0`
 . $PWDIR/pw_env.sh
 
+suffix=$1 # to add something like "-v2"
 today=`date +%Y-%m-%d`
 start_commit=`git merge-base HEAD wireless-next/main`
-tagname=rtw-next-$today
+tagname=rtw-next-$today$suffix
 
 echo "rtw-next patches for v6.x
 
