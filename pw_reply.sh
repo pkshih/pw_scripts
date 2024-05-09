@@ -111,7 +111,12 @@ function get_plain_email_addr()
 	# --> martin.kaistra@linutronix.de linux-wireless@vger.kernel.org
 	# linux-wireless@vger.kernel.org, <abc>abc@abc.com, <bcd>bcd@bcd.com
 	# --> linux-wireless@vger.kernel.org abc@abc.com bcd@bcd.com
-	echo $complex | sed "s/^[^<,]*<//" | sed "s/,[^<,]*</,/g" | sed "s/>[ ]*$//g" | sed "s/>[ ]*,/ /g" | sed "s/[ ]*,[ ]*/ /g"
+	# linux-wireless@vger.kernel.org (open list:REALTEK WIRELESS DRIVER (rtw89)),
+	#       linux-kernel@vger.kernel.org (open list)
+	# --> linux-wireless@vger.kernel.org linux-kernel@vger.kernel.org
+	#     (currently remove at most two levels of nested parenthesis)
+	echo $complex | sed "s/^[^<,]*<//" | sed "s/,[^<,]*</,/g" | sed "s/>[ ]*$//g" | sed "s/>[ ]*,/ /g" | sed "s/[ ]*,[ ]*/ /g" |
+		sed "s/([^()]*)//g" | sed "s/([^()]*)//g"
 }
 
 t=`get_plain_email_addr "${reply["To"]}"`
