@@ -12,7 +12,7 @@ if [ "$?" == "0" ]; then
 	sed -i -e "/$sob/d" "$1"
 	sed -i -e "s/^\(Message-Id:\)/$sob\n\1/g;" "$1"
 
-	perl -pi -e 's|^Message-Id:\s*<?([^>]+)>?$|Link: https://msgid.link/$1|g;' "$1"
+	perl -pi -e 's|^Message-Id:\s*<?([^>]+)>?$|Link: https://patch.msgid.link/$1|g;' "$1"
 fi
 
 test -x "$GIT_DIR/hooks/commit-msg" &&
