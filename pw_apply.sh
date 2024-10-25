@@ -26,8 +26,8 @@ for id in $ids; do
 
 	if [ "$PWINT" != "" ]; then
 		while [ 1 ]; do
-			read -p "Edit commit message by 'git commit --amend'? (y/n/s) " y
-			if [ "$y" == "y" ]; then
+			read -p "Edit commit message by 'git commit --amend'? (e/n/s) " y
+			if [ "$y" == "e" ]; then
 				git commit --amend
 			elif [ "$y" == "n" ]; then
 				break
@@ -38,8 +38,17 @@ for id in $ids; do
 		done
 	fi
 
-	$PWDIR/pw_check_top.sh
-	[ "$?" != "0" ] && exit 1
+	while [ 1 ]; do
+		$PWDIR/pw_check_top.sh
+		ret=$?
+		if [ "$ret" == "0" ]; then
+			break
+		elif [ "$ret" == "$PW_EAGAIN" ]; then
+			git commit --amend
+		elif [ "$ret" != "0" ]; then
+			exit 1
+		fi
+	done
 
 	echo -e "\e[0;44m-------------------------------------------------- end $((n+1))/$guess_n: $id\e[0m"
 

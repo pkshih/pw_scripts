@@ -12,6 +12,8 @@ PR_UPSTREAM=wireless-next/main
 PR_WORKURL=https://github.com/pkshih/rtw.git
 PR_RECEIVER=linux-wireless@vger.kernel.org
 
+PW_EAGAIN=203
+
 MAIL_FOOTER="
 ---
 https://github.com/pkshih/rtw.git

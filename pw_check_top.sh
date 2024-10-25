@@ -4,6 +4,9 @@
 
 # To run all checks unconditionally, use 'yes ./pw_check.sh'
 
+PWDIR=`dirname $0`
+. $PWDIR/pw_env.sh
+
 # ----------------------------------------------------------------------
 # check subject prefix -- wifi: rtl
 #
@@ -23,8 +26,12 @@ if [ "$match" == "" ] || [ "$dirmatch" == "" ]; then
 	echo -e "\e[0;33minvalid subject: $subject $extra_msg\e[0m"
 	if [ "$PWDRY" == "" ]; then
 		[ "$revert" != "" ] && echo -e "\e[0;34msuggest to continue because of revert commit.\e[0m"
-		echo -n "Continue? (y) "
-		read y && [ "$y" != "y" ] && exit 1
+		read -p "Continue? (y/e) " y
+		if [ "$y" == "e" ]; then
+			exit $PW_EAGAIN
+		elif [ "$y" != "y" ]; then
+			exit 1
+		fi
 	fi
 fi
 
@@ -34,8 +41,12 @@ fi
 ret=$?
 
 if [ "$PWDRY" == "" ] && [ $ret != 0 ]; then
-	echo -n "Continue? (y) "
-	read y && [ "$y" != "y" ] && exit 1
+	read -p "Continue? (y/e) " y
+	if [ "$y" == "e" ]; then
+		exit $PW_EAGAIN
+	elif [ "$y" != "y" ]; then
+		exit 1
+	fi
 fi
 
 
