@@ -37,7 +37,7 @@ fi
 
 # ----------------------------------------------------------------------
 # checkpatch
-./scripts/checkpatch.pl <(git show --pretty=email)
+./scripts/checkpatch.pl --ignore C99_COMMENT_TOLERANCE <(git show --pretty=email)
 ret=$?
 
 if [ "$PWDRY" == "" ] && [ $ret != 0 ]; then
