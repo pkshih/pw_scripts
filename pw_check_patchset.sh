@@ -14,7 +14,7 @@ function remove_uncessary_log()
 	#          You may get many unresolved symbol errors.                             
 	#          You can set KBUILD_MODPOST_WARN=1 to turn errors into warning          
 	#          if you want to proceed at your own risk.                               
-	sed -i "/^WARNING: Module.symvers/,+4d" $logfile
+	sed -i "/^WARNING: .*Module.symvers/,+4d" $logfile
 
 	# WARNING: modpost: "__usecs_to_jiffies" [/work/linux-src/linux-stable/drivers/net/wireless/realtek/rtl818x/rtl8180/rtl818x_pci.ko] undefined!
 	sed -i "/^WARNING: modpost:/d" $logfile
