@@ -81,7 +81,7 @@ read -p "Apply state ($state) to $n patch(es)? (y) " y
 
 echo "Applying state ($state) to $ids ..."
 
-pwclient update -p linux-wireless-rest -s "$state" $ids
+pwclient update -s "$state" $ids
 
 echo -e "\e[0;44m-------------<< for notification email >>------------------\e[0m"
 
