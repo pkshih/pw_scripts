@@ -17,7 +17,7 @@ subject_sha1=`git log --oneline -1 --decorate=no`
 subject=`echo $subject_sha1 | cut -f 2- -d ' '`
 
 revert=`echo $subject | grep "^Revert \""`
-match=`echo $subject | sed -n "s/\(wifi: \(rtw89\|rtw88\|rtlwifi\|rtl8xxxu\)\): .*/\2/p"`
+match=`echo $subject | sed -n "s/\(wifi: \(rtw89\|rtw88\|rtlwifi\|rtl8xxxu\|rtl818x\)\): .*/\2/p"`
 dirmatch=`git diff HEAD^ --name-only | grep drivers/net/wireless/realtek/$match`
 extra_msg=""
 [ "$dirmatch" == "" ] && extra_msg="(because of mismatch of directory)"
