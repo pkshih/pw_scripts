@@ -8,6 +8,8 @@
 #    PWINT=1 pw_apply.sh
 # Dry-run mode to apply all patches
 #    PWDRY=1 pw_apply.sh
+# Use 3-way git-am
+#    PW3=1 pw_apply.sh
 
 PWDIR=`dirname $0`
 . $PWDIR/pw_env.sh
@@ -16,11 +18,12 @@ ids=$@
 firstid=
 n=0
 guess_n=`echo "$ids" | wc -w`
+[ "$PW3" == "1" ] && with_3way="-3"
 
 for id in $ids; do
 	echo -e "\e[0;44m-------------------------------------------------- start $((n+1))/$guess_n: $id\e[0m"
 
-	pwclient git-am $id
+	pwclient git-am $with_3way $id
 	[ "$?" != "0" ] && exit 1;
 	[ "$n" == "0" ] && firstid=$id
 
