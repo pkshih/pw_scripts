@@ -4,6 +4,9 @@
 #    $1: commit ID from patchwork
 #    $2: message you want to reply to author, such as "thanks"
 
+# To replay full patch:
+#   PWRF=1 pw_reply.sh
+
 PWDIR=`dirname $0`
 . $PWDIR/pw_env.sh
 
@@ -129,7 +132,14 @@ receivers="$receivers $t"
 #################################################################
 # make body, and add wrote at beginning of body
 
+if [ "$PWRF" == "1" ]; then
+# .2 commit message + patch content
+body=`echo "$full" | sed -n "/^$/,/^---$/p" | sed "s/^/> /"`
+else
+# 1. commit message only
 body=`echo "$full" | sed -n "/^$/,/^---$/p" | sed -n "/^---$/q;p" | tail -n +2 - | sed "s/^/> /"`
+fi
+
 body="${original["From"]} wrote:
 
 $body"
