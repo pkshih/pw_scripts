@@ -64,7 +64,7 @@ $PWDIR/pw_check_patchset.sh $n
 
 [ "$PWDRY" == "1" ] && exit 0
 echo -e "\e[0;44m-------------<< for notification email >>------------------\e[0m"
-notify_msg="$n patch(es) applied to rtw-next branch of rtw.git, thanks."
+notify_msg="$n patch(es) applied to $PW_RTW_TREE branch of rtw.git, thanks."
 t=`git log --oneline -n $n --decorate=no --reverse`
 notify_msg="$notify_msg
 

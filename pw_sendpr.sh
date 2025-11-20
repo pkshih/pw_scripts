@@ -20,7 +20,7 @@ Subject: pull-request: $tag_name
 
 Hi,
 
-A pull-request of rtw-next to wireless-next tree, more info below. Please
+A pull-request of $PW_RTW_TREE to $PW_WIRELESS_TREE tree, more info below. Please
 let me know if any problems.
 
 Thanks
