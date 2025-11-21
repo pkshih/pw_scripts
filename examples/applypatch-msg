@@ -8,9 +8,18 @@ if [ "$?" == "0" ]; then
 	te=$(git config --get user.email) || exit 0
 	sob="Signed-off-by: $tn <$te>"
 
-	# prevent duplicate s-o-b
-	sed -i -e "/$sob/d" "$1"
-	sed -i -e "s/^\(Message-Id:\)/$sob\n\1/g;" "$1"
+
+	# Method 1: prevent duplicate s-o-b
+	#  - remove all s-o-b and add single one s-o-b before Message-Id
+	#sed -i -e "/$sob/d" "$1"
+	#sed -i -e "s/^\(Message-Id:\)/$sob\n\1/g;" "$1"
+
+	# Method 2: prevent duplicate s-o-b
+	#  - only if s-o-b not existing, add single one s-o-b before Message-Id
+	grep "$sob" "$1" > /dev/null
+	if [ "$?" != "0" ]; then
+		sed -i -e "s/^\(Message-Id:\)/$sob\n\1/g;" "$1"
+	fi
 
 	perl -pi -e 's|^Message-Id:\s*<?([^>]+)>?$|Link: https://patch.msgid.link/$1|g;' "$1"
 fi
