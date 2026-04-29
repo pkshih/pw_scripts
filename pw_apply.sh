@@ -4,6 +4,9 @@
 #    base: 42ffccd0a36e ("wifi: rtlwifi: rtl_usb: Store the endpoint addresses")
 #    apply: pw_apply.sh 13559073 13559387 13561583
 
+# Interactive mode per commit
+#    add prefix 'I', such as I13559387
+
 # Interactive mode to modify commit message and etc
 #    PWINT=1 pw_apply.sh
 # Dry-run mode to apply all patches
@@ -23,11 +26,18 @@ guess_n=`echo "$ids" | wc -w`
 for id in $ids; do
 	echo -e "\e[0;44m-------------------------------------------------- start $((n+1))/$guess_n: $id\e[0m"
 
+	if [[ $id == I* ]]; then
+		local_int=1
+		id="${id#I}"
+	else
+		local_int=0
+	fi
+
 	pwclient git-am $with_3way $id
 	[ "$?" != "0" ] && exit 1;
 	[ "$n" == "0" ] && firstid=$id
 
-	if [ "$PWINT" != "" ]; then
+	if [[ "$PWINT" != "" || $local_int == 1 ]]; then
 		while [ 1 ]; do
 			read -p "Edit commit message by 'git commit --amend'? (e/n/s) " y
 			if [ "$y" == "e" ]; then
