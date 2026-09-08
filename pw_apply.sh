@@ -22,6 +22,7 @@ firstid=
 n=0
 guess_n=`echo "$ids" | wc -w`
 [ "$PW3" == "1" ] && with_3way="-3"
+use_b4_am=1 # new patchwork can't 'get' neither 'git-am'
 
 for id in $ids; do
 	echo -e "\e[0;44m-------------------------------------------------- start $((n+1))/$guess_n: $id\e[0m"
@@ -33,8 +34,22 @@ for id in $ids; do
 		local_int=0
 	fi
 
-	pwclient git-am $with_3way $id
-	[ "$?" != "0" ] && exit 1;
+	if [ "$use_b4_am" == "1" ]; then
+		tmp_f=/tmp/$id.patch
+
+		msg_id=`pwclient info $id | grep '^- msgid' | sed -E 's/^- msgid *: <(.*)>/\1/'`
+		#msg_id=20260902052958.50371-2-pkshih@realtek.com
+		[ "$?" != "0" ] && exit 1;
+
+		b4 am -P _ $msg_id --add-link -o - > $tmp_f
+		[ "$?" != "0" ] && exit 1;
+
+		git am $with_3way $tmp_f
+		[ "$?" != "0" ] && exit 1;
+	else
+		pwclient git-am $with_3way $id
+		[ "$?" != "0" ] && exit 1;
+	fi
 	[ "$n" == "0" ] && firstid=$id
 
 	if [[ "$PWINT" != "" || $local_int == 1 ]]; then
