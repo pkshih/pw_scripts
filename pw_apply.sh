@@ -41,7 +41,7 @@ for id in $ids; do
 		#msg_id=20260902052958.50371-2-pkshih@realtek.com
 		[ "$?" != "0" ] && exit 1;
 
-		b4 am -P _ $msg_id --add-link -o - > $tmp_f
+		b4 am -P _ $msg_id --add-link --add-my-sob -o - > $tmp_f
 		[ "$?" != "0" ] && exit 1;
 
 		git am $with_3way $tmp_f
