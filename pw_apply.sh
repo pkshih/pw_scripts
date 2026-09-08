@@ -9,7 +9,7 @@
 
 # Interactive mode to modify commit message and etc
 #    PWINT=1 pw_apply.sh
-# Dry-run mode to apply all patches
+# Dry-run mode to apply all patches (no build)
 #    PWDRY=1 pw_apply.sh
 # Use 3-way git-am
 #    PW3=1 pw_apply.sh
@@ -66,6 +66,7 @@ for id in $ids; do
 		done
 	fi
 
+	[ "$PWDRY" != "1" ] &&
 	while [ 1 ]; do
 		$PWDIR/pw_check_top.sh
 		ret=$?
@@ -83,11 +84,12 @@ for id in $ids; do
 	n=$((n+1))
 done
 
+[ "$PWDRY" == "1" ] && exit 0
+
 echo -e "\e[0;44m-------------<< run checkers for all patchset >>------------------\e[0m"
 $PWDIR/pw_check_patchset.sh $n
 [ "$?" != "0" ] && exit 1
 
-[ "$PWDRY" == "1" ] && exit 0
 echo -e "\e[0;44m-------------<< for notification email >>------------------\e[0m"
 notify_msg="$n patch(es) applied to $PW_RTW_TREE branch of rtw.git, thanks."
 t=`git log --oneline -n $n --decorate=no --reverse`
