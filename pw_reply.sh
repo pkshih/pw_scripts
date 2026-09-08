@@ -13,6 +13,7 @@ PWDIR=`dirname $0`
 # 13566773
 id=$1
 reply_msg="$2"
+use_b4_am=1 # new patchwork can't 'get' neither 'git-am' neither 'view'
 
 debug=
 
@@ -71,7 +72,13 @@ function get_fields()
 }
 
 echo "Getting $id from patchwork..."
+if [ "$use_b4_am" == "1" ]; then
+msg_id=`pwclient info $id | grep '^- msgid' | sed -E 's/^- msgid *: <(.*)>/\1/'`
+#msg_id="20260902052958.50371-13-pkshih@realtek.com"
+full=`b4 mbox --single-message -o - $msg_id`
+else
 full=`pwclient view $id`
+fi
 mhdr=`echo "$full" | sed -n ":again; s/^$//; t end; p; n; b again; :end; n; b end"`
 
 #################################################################
