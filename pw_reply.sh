@@ -13,7 +13,7 @@ PWDIR=`dirname $0`
 # 13566773
 id=$1
 reply_msg="$2"
-use_b4_am=1 # new patchwork can't 'get' neither 'git-am' neither 'view'
+use_b4_am= # new patchwork can't 'get' neither 'git-am' neither 'view'
 
 debug=
 

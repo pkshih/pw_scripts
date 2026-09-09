@@ -22,7 +22,7 @@ firstid=
 n=0
 guess_n=`echo "$ids" | wc -w`
 [ "$PW3" == "1" ] && with_3way="-3"
-use_b4_am=1 # new patchwork can't 'get' neither 'git-am'
+use_b4_am= # new patchwork can't 'get' neither 'git-am'
 
 for id in $ids; do
 	echo -e "\e[0;44m-------------------------------------------------- start $((n+1))/$guess_n: $id\e[0m"
